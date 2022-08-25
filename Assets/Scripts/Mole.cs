@@ -1,17 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Mole : MonoBehaviour
+public class Mole : MonoBehaviour,IPointerClickHandler
 {
     //何秒おきに上げ下げをするかの値
     private float perSeconds;
     //上げ下げしているか否か
     private bool isUp;
+    private GameManager GameManager;
+   
 
     private void Start()
     {
         isUp = false;
+        GameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -29,9 +32,11 @@ public class Mole : MonoBehaviour
         }       
     }
 
-    public void OnClickMole()
+    //ハンマーがモグラをクリックしたときスコアを加算する
+    public void OnPointerClick(PointerEventData pointerData)
     {
-        Debug.Log("hoge");
+        Debug.Log(gameObject.name + " がクリックされた!");
+        GameManager.AddPoint();
     }
 
     IEnumerator MoleUpDown()
