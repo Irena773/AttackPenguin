@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private int addPoint = 1;
 
     //制限時間
-    private float limitTime = 10;
+    private float limitTime;
     private Text timeText;
 
     //タイトル用テキスト・パネル
@@ -33,8 +33,7 @@ public class GameManager : MonoBehaviour
 
 
     void Start()
-    {
-        score = 0;
+    {        
         scoreText  = GameObject.Find("Score").GetComponent<Text>();
         timeText   = GameObject.Find("Time").GetComponent<Text>();
         titleText  = GameObject.Find("Title").GetComponent<Text>();
@@ -44,25 +43,27 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //制限時間の更新
         scoreText.text = score.ToString();
+        timeText.text = limitTime.ToString("F0");
         // ゲーム中ではなく、Spaceキーが押されたらtrueを返す。
         if (currentState == GameState.Opening && Input.GetKeyDown(KeyCode.Space))
         {
             dispatch(GameState.Playing);
         }
-
-        if (currentState == GameState.Playing && 0 < limitTime)
+        if (currentState == GameState.Playing )
         {
-            limitTime -= Time.deltaTime;
-            timeText.text = limitTime.ToString("F0");
-        }
-        //ゲームクリアの判定
-        if(limitTime <= 0)
-        {
-            dispatch(GameState.Clear);
-        }
-        
+            if(0.4f < limitTime)
+            {
+                limitTime -= Time.deltaTime;
+                //制限時間の更新
+                timeText.text = limitTime.ToString("F0");
+            }
+            //ゲームクリアの判定
+            else if (limitTime <= 0.4f)
+            {
+                dispatch(GameState.Clear);
+            }
+        }   
     }
 
     //スコアの加算
@@ -95,17 +96,21 @@ public class GameManager : MonoBehaviour
     void GameOpening()
     {
         currentState = GameState.Opening;
-        //動作の停止
-        Time.timeScale = 0;
+        //制限時間のセット
+        limitTime = 5;
+        //スコアの初期化
+        score = 0;
         // タイトル名のセット
         SetTitle("Game Start", Color.green);
+        //動作の停止
+        Time.timeScale = 0;
     }
 
     //ゲームスタート処理
     void GameStart()
     {
-        Time.timeScale = 1.0f;
         titlePanel.SetActive(false);
+        Time.timeScale = 1.0f;        
     }
 
     //ゲームクリア処理

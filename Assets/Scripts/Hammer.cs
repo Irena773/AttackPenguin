@@ -29,9 +29,9 @@ public class Hammer : MonoBehaviour
         //mousePos.z = transform.localPosition.z;
         //ハンマーの画像をカーソルに追従
         //transform.localPosition = mousePos;
-
+        mousePos.z = 100f;
         //ハンマーの画像をカーソルに追従
-        target = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 100));       
+        target = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, mousePos.z));       
         this.transform.position = target;
 
         if (Input.GetMouseButtonDown(0))

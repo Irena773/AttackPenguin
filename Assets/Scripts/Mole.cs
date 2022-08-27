@@ -39,12 +39,14 @@ public class Mole : MonoBehaviour,IPointerClickHandler
         GameManager.AddPoint();
     }
 
+   
+
     IEnumerator MoleUpDown()
     {
         for (int i = 0; i < 16; i++)
         {
             //Œ»Ý‚Ìƒ‚ƒOƒ‰‚ÌˆÊ’u‚ðŠî€‚É‚µ‚Äã‚ÉˆÚ“®
-            transform.Translate(0, 5f, 0);
+            transform.Translate(0, 0.1f, 0);
             //0.02•b’âŽ~
             yield return new WaitForSeconds(0.02f);
         }
@@ -52,7 +54,7 @@ public class Mole : MonoBehaviour,IPointerClickHandler
         for (int i = 0; i < 16; i++)
         {
             //Œ»Ý‚Ìƒ‚ƒOƒ‰‚ÌˆÊ’u‚ðŠî€‚É‚µ‚Ä‰º‚ÉˆÚ“®
-            transform.Translate(0, -5f, 0);
+            transform.Translate(0, -0.1f, 0);
             yield return new WaitForSeconds(0.02f);
         }
         isUp = false;
