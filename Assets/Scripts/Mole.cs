@@ -9,11 +9,13 @@ public class Mole : MonoBehaviour,IPointerClickHandler
     //上げ下げしているか否か
     private bool isUp;
     private GameManager GameManager;
-   
+    //叩かれたかどうか(一回だけしかクリックを受け付けない)
+    private bool isPushed;
 
     private void Start()
     {
         isUp = false;
+        isPushed = false;
         GameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
     }
 
@@ -35,11 +37,13 @@ public class Mole : MonoBehaviour,IPointerClickHandler
     //ハンマーがモグラをクリックしたときスコアを加算する
     public void OnPointerClick(PointerEventData pointerData)
     {
-        Debug.Log(gameObject.name + " がクリックされた!");
-        GameManager.AddPoint();
+        if (isUp == true && isPushed == false)
+        {
+            Debug.Log(gameObject.name + " がクリックされた!");
+            GameManager.AddPoint();
+            isPushed = true;
+        }
     }
-
-   
 
     IEnumerator MoleUpDown()
     {
@@ -58,6 +62,7 @@ public class Mole : MonoBehaviour,IPointerClickHandler
             yield return new WaitForSeconds(0.02f);
         }
         isUp = false;
+        isPushed=false;
     }
 
     
