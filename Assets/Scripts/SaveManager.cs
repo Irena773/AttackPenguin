@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
@@ -14,12 +12,13 @@ public class SaveManager : MonoBehaviour
 {
     private string filePath;
     private SaveData highScoreData;
-    private int highScore;
+    private GameManager nowScoreData;
+    private StageGenerator stageGenerator;
     private int stageNum;
 
     void Start()
     {
-        filePath = "/savedata.json";
+        filePath = "/savedata.json";       
     }
 
 
@@ -32,8 +31,10 @@ public class SaveManager : MonoBehaviour
         highScoreData = new SaveData();
         highScoreData = JsonUtility.FromJson<SaveData>(inputString);
 
+        nowScoreData = new GameManager();
+        int nowHighScore = nowScoreData.GetScore();
         int prevHighScore = highScoreData.stageHighScore[stageID];
-        int nowHighScore = 0;
+        
 
         if(prevHighScore < nowHighScore)
         {
@@ -47,8 +48,33 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    public int Load(int stageID)
+    {
+        //セーブファイルがないとき、新規作成する
+        if (!File.Exists(Application.persistentDataPath + filePath)) CreateSaveFile();
+
+        StreamReader reader = new StreamReader (Application.persistentDataPath + filePath);
+        string inputString = reader.ReadToEnd();
+        reader.Close();
+        highScoreData = JsonUtility.FromJson<SaveData>(inputString);
+
+        return highScoreData.stageHighScore[stageID];
+    }
+
+    //新規でセーブファイルを作成する
     public void CreateSaveFile()
     {
+        StreamWriter writer = File.CreateText(filePath);
 
+        stageGenerator = new StageGenerator();
+        stageNum = stageGenerator.GetStageNum();
+
+        highScoreData = new SaveData();
+        highScoreData.stageHighScore = new int[stageNum + 1];
+        string jsonstr = JsonUtility.ToJson(highScoreData);
+
+        writer.Write(jsonstr);
+        writer.Flush();
+        writer.Close();
     }
 }

@@ -15,13 +15,19 @@ public class Mole : MonoBehaviour,IPointerClickHandler
    
     private ParticleSystem heartPs;
     [SerializeField] GameObject heartParticle;
-    
+
+
+    //モグラを叩く音
+    public AudioClip punchClip;
+    private AudioSource audioSource;
+
     private void Start()
     {
         isUp = false;
         isPushed = false;
         GameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         heartPs = heartParticle.GetComponentInChildren<ParticleSystem>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -44,7 +50,8 @@ public class Mole : MonoBehaviour,IPointerClickHandler
     {
         if (isUp == true && isPushed == false)
         {
-            //星のパーティクルをだす
+            audioSource.PlayOneShot(punchClip);
+            //ハートのパーティクルをだす
             Instantiate(heartPs, this.transform.position, Quaternion.identity);
             heartPs.Play();
             Debug.Log(gameObject.name + " がクリックされた!");

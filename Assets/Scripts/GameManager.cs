@@ -6,6 +6,10 @@ using UnityEngine.UI;
 //ゲームの進行管理や全体的なパラメーターを保持する
 public class GameManager : MonoBehaviour
 {
+    public int GetScore()
+    {
+        return score;
+    }
     //プレイヤーのスコア
     private int score;
     private Text scoreText;
