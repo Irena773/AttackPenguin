@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using static UnityEngine.GraphicsBuffer;
 
 public class Mole : MonoBehaviour,IPointerClickHandler
 {
+   
     //何秒おきに上げ下げをするかの値
-    private float perSeconds;
+    public float perSeconds;
+    //何秒おきに上げ下げをするかの値を保存しておく
+    private float savePerSeconds;
     //上げ下げしているか否か
     private bool isUp;
     private GameManager GameManager;
@@ -23,8 +25,10 @@ public class Mole : MonoBehaviour,IPointerClickHandler
 
     private void Start()
     {
+        savePerSeconds = perSeconds;
         isUp = false;
         isPushed = false;
+ 
         GameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
         heartPs = heartParticle.GetComponentInChildren<ParticleSystem>();
         audioSource = GetComponent<AudioSource>();
@@ -32,16 +36,15 @@ public class Mole : MonoBehaviour,IPointerClickHandler
 
     void Update()
     {
-        //2秒おきに上げ下げを行う
+        //n秒おきに上げ下げを行う
         perSeconds -= Time.deltaTime;
         if (perSeconds <= 0)
         {
             if (!isUp)
-            {
-                isUp = true;
+            {    
                 StartCoroutine("MoleUpDown");
             }
-            perSeconds = 2.0f;
+            perSeconds = savePerSeconds;        
         }   
     }
 
@@ -50,18 +53,21 @@ public class Mole : MonoBehaviour,IPointerClickHandler
     {
         if (isUp == true && isPushed == false)
         {
+            //叩いた音をだす
             audioSource.PlayOneShot(punchClip);
             //ハートのパーティクルをだす
             Instantiate(heartPs, this.transform.position, Quaternion.identity);
             heartPs.Play();
-            Debug.Log(gameObject.name + " がクリックされた!");
+            //スコアの加算
             GameManager.AddPoint();
             isPushed = true;
+           
         }
     }
 
     IEnumerator MoleUpDown()
     {
+        isUp = true;
         for (int i = 0; i < 16; i++)
         {
             //現在のモグラの位置を基準にして上に移動
@@ -70,6 +76,7 @@ public class Mole : MonoBehaviour,IPointerClickHandler
             yield return new WaitForSeconds(0.02f);
         }
 
+        yield return new WaitForSeconds(0.5f);
         for (int i = 0; i < 16; i++)
         {
             //現在のモグラの位置を基準にして下に移動
@@ -79,8 +86,5 @@ public class Mole : MonoBehaviour,IPointerClickHandler
         isUp = false;
         isPushed=false;
     }
-
-    
-
 
 }

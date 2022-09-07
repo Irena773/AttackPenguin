@@ -20,15 +20,13 @@ public class Hammer : MonoBehaviour
         mousePos = Input.mousePosition;
         mousePos.z = 10.0f;
         //ハンマーの画像をカーソルに追従
-        target = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, mousePos.z));       
+        target = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x+10, mousePos.y-5, mousePos.z));       
         this.transform.position = target;
 
         if (Input.GetMouseButtonDown(0))
         {
             //SetTriggerでアニメーションMoveを発動させる
             hammerAnimator.SetTrigger("Move");
-            
-
         }
     }
 }
