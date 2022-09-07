@@ -10,10 +10,15 @@ public class Hammer : MonoBehaviour
     private Vector3 mousePos, target;
     private float magnification;
 
+    private ParticleSystem starPs;
+    [SerializeField] GameObject starParticle;
+
     void Start()
     {
         canvasRect = GameObject.Find("HammerGUI").GetComponent<RectTransform>();
         hammerAnimator = GetComponent<Animator>();
+
+        starPs = starParticle.GetComponentInChildren<ParticleSystem>();
     }
 
     void Update()
@@ -29,7 +34,7 @@ public class Hammer : MonoBehaviour
         //mousePos.z = transform.localPosition.z;
         //ハンマーの画像をカーソルに追従
         //transform.localPosition = mousePos;
-        mousePos.z = 100f;
+        mousePos.z = 10.0f;
         //ハンマーの画像をカーソルに追従
         target = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, mousePos.z));       
         this.transform.position = target;
@@ -38,6 +43,9 @@ public class Hammer : MonoBehaviour
         {
             //SetTriggerでアニメーションMoveを発動させる
             hammerAnimator.SetTrigger("Move");
+            //星のパーティクルをだす
+            Instantiate(starPs, target, Quaternion.identity);
+            starPs.Play();
         }
     }
 }

@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
     {
         currentState = GameState.Opening;
         //制限時間のセット
-        limitTime = 5;
+        limitTime = 60;
         //スコアの初期化
         score = 0;
         // タイトル名のセット
