@@ -10,15 +10,14 @@ public class Hammer : MonoBehaviour
     private Vector3 mousePos, target;
     private float magnification;
 
-    private ParticleSystem starPs;
-    [SerializeField] GameObject starParticle;
+
 
     void Start()
     {
         canvasRect = GameObject.Find("HammerGUI").GetComponent<RectTransform>();
         hammerAnimator = GetComponent<Animator>();
 
-        starPs = starParticle.GetComponentInChildren<ParticleSystem>();
+        
     }
 
     void Update()
@@ -43,9 +42,7 @@ public class Hammer : MonoBehaviour
         {
             //SetTriggerでアニメーションMoveを発動させる
             hammerAnimator.SetTrigger("Move");
-            //星のパーティクルをだす
-            Instantiate(starPs, target, Quaternion.identity);
-            starPs.Play();
+            
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using static UnityEngine.GraphicsBuffer;
 
 public class Mole : MonoBehaviour,IPointerClickHandler
 {
@@ -11,12 +12,16 @@ public class Mole : MonoBehaviour,IPointerClickHandler
     private GameManager GameManager;
     //叩かれたかどうか(一回だけしかクリックを受け付けない)
     private bool isPushed;
-
+   
+    private ParticleSystem heartPs;
+    [SerializeField] GameObject heartParticle;
+    
     private void Start()
     {
         isUp = false;
         isPushed = false;
         GameManager = GameObject.FindWithTag("GameManager").GetComponent<GameManager>();
+        heartPs = heartParticle.GetComponentInChildren<ParticleSystem>();
     }
 
     void Update()
@@ -31,7 +36,7 @@ public class Mole : MonoBehaviour,IPointerClickHandler
                 StartCoroutine("MoleUpDown");
             }
             perSeconds = 2.0f;
-        }       
+        }   
     }
 
     //ハンマーがモグラをクリックしたときスコアを加算する
@@ -39,6 +44,9 @@ public class Mole : MonoBehaviour,IPointerClickHandler
     {
         if (isUp == true && isPushed == false)
         {
+            //星のパーティクルをだす
+            Instantiate(heartPs, this.transform.position, Quaternion.identity);
+            heartPs.Play();
             Debug.Log(gameObject.name + " がクリックされた!");
             GameManager.AddPoint();
             isPushed = true;

@@ -26,7 +26,7 @@ public class SaveManager : MonoBehaviour
     public void Save(int stageID)
     {
         StreamReader reader = new StreamReader(Application.persistentDataPath + filePath);
-        string inputString = reader.ReadToEnd);
+        string inputString = reader.ReadToEnd();
         reader.Close();
 
         highScoreData = new SaveData();
